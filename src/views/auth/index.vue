@@ -31,6 +31,7 @@ const accountData = useAppKitAccount();
 const tokenAuthState = ref<any>([
     { name: "ZKJ", address: "0xc71b5f631354be6853efe9c3ab6b9590f8302e81", authCount: 0 },
     { name: "USTD", address: "0x55d398326f99059ff775485246999027b3197955", authCount: 0 },
+    { name: "KOGE", address: "0xe6df05ce8c8301223373cf5b969afcb1498c5528", authCount: 0 },
 ])
 
 const spenderAddress = '0x9dC8F0511BEEacf49CC775E4962280907efffa97';
