@@ -75,31 +75,27 @@ const approve = async (address: string) => {
         ElMessage.error('授权失败')
     }
 }
-watchEffect(async (onInvalidate) => {
-    let canceled = false
+watch(
+    () => accountData.value.address,
+    async (newAddress) => {
+        if (!newAddress) return;
 
-    onInvalidate(() => {
-        canceled = true
-    })
+        try {
+            const promises = tokenAuthState.value.map(async (item: any) => {
+                const authCount = await allowance(item.address);
+                return {
+                    ...item,
+                    authCount: Number(authCount),
+                };
+            });
 
-    const update = async () => {
-        const promises = tokenAuthState.value.map(async (item: any) => {
-            const authCount = await allowance(item.address)
-            return {
-                ...item,
-                authCount: Number(authCount),
-            }
-        })
-
-        const result = await Promise.all(promises)
-
-        if (!canceled) {
-            tokenAuthState.value = result
+            tokenAuthState.value = await Promise.all(promises);
+        } catch (err) {
+            console.error('Failed to update token allowances:', err);
         }
-    }
-
-    update()
-});
+    },
+    { immediate: true }
+);
 
 
 </script>
