@@ -6,6 +6,10 @@
 				<el-button type="primary" @click="addItem">添加地址</el-button>
 			</div>
 			<div class="wrap">
+				<div class="item-col" style="margin-bottom: 20px;">
+			          <div class="item-row__label">一键导入地址:</div>
+			          <el-input v-model="address" placeholder="一键导入地址" style="width: 300px" @change="onChange" />
+			        </div>
 				<div class="item" v-for="(item, index) in listAll" :key="index">
 					<div class="item-col">
 						<div>{{ index + 1 }}.</div>
@@ -91,6 +95,19 @@ const confirm = () => {
 const close = () => {
 	emits('closeBtn', false);
 };
+const address = ref('');
+const onChange = (e: string) => {
+  const arr = e.split(' ');
+  if (arr.length > 1) {
+    const list = arr.map((e) => {
+      const a2 = e.split('\t')
+      if (a2.length === 2) {
+        return { address: a2[1], name: a2[0], isShow: true }
+      }
+    })
+    listAll.value = [...listAll.value.filter((e: any) => e.address), ...list]
+  }
+}
 </script>
 
 <style lang="less" scoped>
